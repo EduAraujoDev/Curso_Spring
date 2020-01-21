@@ -1,19 +1,12 @@
 package br.com.alura.forum.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-
-import br.com.alura.forum.model.topic.domain.Topic;
 
 @Entity
 public class User {
@@ -51,6 +44,10 @@ public class User {
 	public String getEmail() {
 		return this.email;
 	}
+	
+	public String getPassword() {
+		return this.password;
+	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -64,8 +61,4 @@ public class User {
 	public int hashCode() {
 		return Objects.hash(email);
 	}
-	
-	public boolean isOwnerOf(Topic topic) {
-		return this.equals(topic.getOwner());
-    }
 }
