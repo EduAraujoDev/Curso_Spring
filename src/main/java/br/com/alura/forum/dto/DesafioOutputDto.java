@@ -21,11 +21,11 @@ public class DesafioOutputDto {
 		this.categoryName = category.getName();
 	}
 
-	public DesafioOutputDto(String categoryName, List<String> subcategories, int allTopics, int lastWeekTopics,
+	public DesafioOutputDto(Category category, int allTopics, int lastWeekTopics,
 			int unansweredTopics) {
 		super();
-		this.categoryName = categoryName;
-		this.subcategories = subcategories;
+		this.categoryName = category.getName();
+		this.subcategories = category.getSubcategoryNames();
 		this.allTopics = allTopics;
 		this.lastWeekTopics = lastWeekTopics;
 		this.unansweredTopics = unansweredTopics;

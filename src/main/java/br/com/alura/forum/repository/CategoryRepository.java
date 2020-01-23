@@ -10,4 +10,6 @@ import br.com.alura.forum.model.Category;
 public interface CategoryRepository extends Repository<Category, Long>, JpaSpecificationExecutor<Category> {
 	
 	List<Category> findAll();
+	
+	List<Category> findByCategoryIsNull();
 }

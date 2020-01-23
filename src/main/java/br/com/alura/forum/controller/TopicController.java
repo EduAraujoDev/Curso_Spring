@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,12 +28,14 @@ import br.com.alura.forum.repository.TopicRepository;
 @RestController
 public class TopicController {
 	
-	@Autowired
 	private TopicRepository topicRepository;
-	
-	@Autowired
 	private CategoryRepository categoryRepository;
 	
+	public TopicController(TopicRepository topicRepository, CategoryRepository categoryRepository) {
+		this.topicRepository = topicRepository;
+		this.categoryRepository = categoryRepository;
+	}
+
 	@GetMapping(value = "/api/topics", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Page<TopicBriefOutputDto> listTopics(TopicSearchInputDto topicSearch, 
 			@PageableDefault(sort="creationInstant", direction=Sort.Direction.DESC) Pageable pageable) {
@@ -49,22 +52,31 @@ public class TopicController {
 	
 	@GetMapping(value = "/api/topics/dashboard", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<DesafioOutputDto> list() {
-		List<DesafioOutputDto> desafioOutputDtos = new ArrayList<>();
 		List<Category> categories = categoryRepository.findAll();
+		/*List<DesafioOutputDto> desafioOutputDtos = new ArrayList<>();
 		
 		categories.stream()
 			.filter(c -> c.getSubcategoryNames() != null && c.getSubcategoryNames().size() > 0)
-			.forEach(ca -> {
+			.forEach(category -> {
 				desafioOutputDtos.add(
 						new DesafioOutputDto(
-								ca.getName(), 
-								ca.getSubcategoryNames(), 
-								topicRepository.countTopicsByCategory(ca), 
-								topicRepository.countLastWeekTopicsByCategory(ca, Instant.now().minus(5, ChronoUnit.DAYS)), 
-								topicRepository.countUnansweredTopicsByCategory(ca))
+								category,
+								topicRepository.countTopicsByCategory(category), 
+								topicRepository.countLastWeekTopicsByCategory(category, Instant.now().minus(7, ChronoUnit.DAYS)), 
+								topicRepository.countUnansweredTopicsByCategory(category))
 						);	
 			});
 		
-		return desafioOutputDtos;
+		return desafioOutputDtos;*/
+		
+		return categories
+				.stream()
+				.filter(c -> c.getSubcategoryNames() != null && c.getSubcategoryNames().size() > 0)
+				.map(c -> new DesafioOutputDto(
+						c,
+						topicRepository.countTopicsByCategory(c), 
+						topicRepository.countLastWeekTopicsByCategory(c, Instant.now().minus(7, ChronoUnit.DAYS)), 
+						topicRepository.countUnansweredTopicsByCategory(c)))
+				.collect(Collectors.toList());
 	}
 }
