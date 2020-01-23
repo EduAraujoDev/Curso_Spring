@@ -10,8 +10,8 @@ public class DesafioOutputDto {
 	private String categoryName;
 	private List<String> subcategories;
 	private int allTopics;
-	private int lastWeelTopics;
-	private int unansweredTopcis;
+	private int lastWeekTopics;
+	private int unansweredTopics;
 	
 	public DesafioOutputDto() {
 		
@@ -21,14 +21,14 @@ public class DesafioOutputDto {
 		this.categoryName = category.getName();
 	}
 
-	public DesafioOutputDto(String categoryName, List<String> subcategories, int allTopics, int lastWeelTopics,
-			int unansweredTopcis) {
+	public DesafioOutputDto(String categoryName, List<String> subcategories, int allTopics, int lastWeekTopics,
+			int unansweredTopics) {
 		super();
 		this.categoryName = categoryName;
 		this.subcategories = subcategories;
 		this.allTopics = allTopics;
-		this.lastWeelTopics = lastWeelTopics;
-		this.unansweredTopcis = unansweredTopcis;
+		this.lastWeekTopics = lastWeekTopics;
+		this.unansweredTopics = unansweredTopics;
 	}
 
 	public String getCategoryName() {
@@ -55,20 +55,20 @@ public class DesafioOutputDto {
 		this.allTopics = allTopics;
 	}
 
-	public int getLastWeelTopics() {
-		return lastWeelTopics;
+	public int getLastWeekTopics() {
+		return lastWeekTopics;
 	}
 
-	public void setLastWeelTopics(int lastWeelTopics) {
-		this.lastWeelTopics = lastWeelTopics;
+	public void setLastWeekTopics(int lastWeelTopics) {
+		this.lastWeekTopics = lastWeelTopics;
 	}
 
-	public int getUnansweredTopcis() {
-		return unansweredTopcis;
+	public int getUnansweredTopics() {
+		return unansweredTopics;
 	}
 
-	public void setUnansweredTopcis(int unansweredTopcis) {
-		this.unansweredTopcis = unansweredTopcis;
+	public void setUnansweredTopics(int unansweredTopcis) {
+		this.unansweredTopics = unansweredTopcis;
 	}
 
 	public static List<DesafioOutputDto> listFromCategories(List<Category> categories) {

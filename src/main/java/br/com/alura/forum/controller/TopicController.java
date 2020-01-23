@@ -52,16 +52,18 @@ public class TopicController {
 		List<DesafioOutputDto> desafioOutputDtos = new ArrayList<>();
 		List<Category> categories = categoryRepository.findAll();
 		
-		categories.forEach(c -> {
-			desafioOutputDtos.add(
-					new DesafioOutputDto(
-							c.getName(), 
-							c.getSubcategoryNames(), 
-							topicRepository.countTopicsByCategory(c), 
-							topicRepository.countLastWeekTopicsByCategory(c, Instant.now().minus(5, ChronoUnit.DAYS)), 
-							topicRepository.countUnansweredTopicsByCategory(c))
-					);
-		});
+		categories.stream()
+			.filter(c -> c.getSubcategoryNames() != null && c.getSubcategoryNames().size() > 0)
+			.forEach(ca -> {
+				desafioOutputDtos.add(
+						new DesafioOutputDto(
+								ca.getName(), 
+								ca.getSubcategoryNames(), 
+								topicRepository.countTopicsByCategory(ca), 
+								topicRepository.countLastWeekTopicsByCategory(ca, Instant.now().minus(5, ChronoUnit.DAYS)), 
+								topicRepository.countUnansweredTopicsByCategory(ca))
+						);	
+			});
 		
 		return desafioOutputDtos;
 	}
