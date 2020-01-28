@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import br.com.alura.forum.dto.DesafioOutputDto;
+import br.com.alura.forum.dto.output.DesafioOutputDto;
 import br.com.alura.forum.model.Category;
 import br.com.alura.forum.repository.CategoryRepository;
 import br.com.alura.forum.repository.TopicRepository;
