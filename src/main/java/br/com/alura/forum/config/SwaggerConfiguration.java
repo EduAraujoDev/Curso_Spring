@@ -28,7 +28,7 @@ public class SwaggerConfiguration {
         return new Docket(DocumentationType.SWAGGER_2)
         		.select()
         		.apis(RequestHandlerSelectors.basePackage("br.com.alura.forum"))
-        		.paths(PathSelectors.ant("/api/**"))
+        		.paths(PathSelectors.ant("/**"))
         		.build()
         		.apiInfo(apiInfo())
         		
@@ -60,8 +60,7 @@ public class SwaggerConfiguration {
     }
 	
 	private ApiInfo apiInfo() {
-		Contact contato = new Contact("Alura", 
-				"https://cursos.alura.com.br/", "contato@alura.com.br");
+		Contact contato = new Contact("Alura", "https://cursos.alura.com.br/", "contato@alura.com.br");
 		
 		return new ApiInfoBuilder()
 				.title("Alura Forum API Documentation")
@@ -70,5 +69,4 @@ public class SwaggerConfiguration {
 				.contact(contato)
 				.build();		
 	}
-
 }

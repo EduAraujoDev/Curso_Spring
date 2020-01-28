@@ -1,6 +1,11 @@
 package br.com.alura.forum.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,7 +17,10 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import br.com.alura.forum.service.UserService;
 
@@ -20,8 +28,13 @@ import br.com.alura.forum.service.UserService;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	@Autowired
 	private UserService userService;
+	private TokenManager tokenManager;
+
+	public SecurityConfig(UserService userService, TokenManager tokenManager) {
+		this.userService = userService;
+		this.tokenManager = tokenManager;
+	}
 
 	@Override 
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception { 
@@ -40,7 +53,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 			.csrf().disable()
 		.sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and()
+			.addFilterBefore(new JwtAuthenticationFilter(tokenManager, userService), UsernamePasswordAuthenticationFilter.class)
+		.exceptionHandling()
+			.authenticationEntryPoint(new JwtAuthenticationEntryPoint());
 	}
 	
 	@Override
@@ -52,5 +69,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
+	}
+	
+	public static class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
+
+		@Override
+		public void commence(HttpServletRequest request, HttpServletResponse response,
+				AuthenticationException authException) throws IOException, ServletException {
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Você não está autorizado a acessar esse recurso."); 			
+		}
 	}
 }
