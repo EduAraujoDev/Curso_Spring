@@ -12,14 +12,15 @@ import br.com.alura.forum.model.PossibleSpam;
 import br.com.alura.forum.model.User;
 import br.com.alura.forum.model.topic.domain.Topic;
 import br.com.alura.forum.repository.TopicRepository;
+import br.com.alura.forum.service.TopicService;
 
 public class NewTopicInputValidator implements Validator {
 	
-	private TopicRepository topicRepository;
+	private TopicService topicService;
 	private User user;
 
-	public NewTopicInputValidator(TopicRepository topicRepository, User user) {
-		this.topicRepository = topicRepository;
+	public NewTopicInputValidator(TopicService topicService, User user) {
+		this.topicService = topicService;
 		this.user = user;
 	}
 
@@ -31,7 +32,7 @@ public class NewTopicInputValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		Instant oneHourAgo = Instant.now().minus(1, ChronoUnit.HOURS);
-		List<Topic> topics = topicRepository.findByOwnerAndCreationInstantAfterOrderByCreationInstantAsc(user, oneHourAgo);
+		List<Topic> topics = topicService.findByOwnerAndCreationInstantAfterOrderByCreationInstantAsc(user, oneHourAgo);
 		
 		/*if (topics.size() >= 4) {
 			Instant instantOfTheOldestTopic = topics.get(0).getCreationInstant();

@@ -1,5 +1,8 @@
 package br.com.alura.forum.service;
 
+import java.time.Instant;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -37,5 +40,9 @@ public class TopicService {
 		Topic topic = new Topic(newTopicDto.getShortDescription(), newTopicDto.getContent(), user, course);
 		
 		return new TopicOutputDto(topicRepository.save(topic));
+	}
+	
+	public List<Topic> findByOwnerAndCreationInstantAfterOrderByCreationInstantAsc(User user, Instant instant) {
+		return topicRepository.findByOwnerAndCreationInstantAfterOrderByCreationInstantAsc(user, instant);
 	}
 }

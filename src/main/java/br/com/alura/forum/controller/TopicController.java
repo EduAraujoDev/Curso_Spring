@@ -42,12 +42,10 @@ public class TopicController {
 	
 	private DashboardService dashboardService;
 	private TopicService topicService;
-	private TopicRepository topicRepository;
 	
-	public TopicController(DashboardService dashboardService, TopicService topicService, TopicRepository topicRepository) {
+	public TopicController(DashboardService dashboardService, TopicService topicService) {
 		this.dashboardService = dashboardService;
 		this.topicService = topicService;
-		this.topicRepository = topicRepository;
 	}
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -79,6 +77,6 @@ public class TopicController {
 	
 	@InitBinder("newTopicInputDto")
 	public void initBinder(WebDataBinder binder, @AuthenticationPrincipal User user) {
-		binder.addValidators(new NewTopicInputValidator(this.topicRepository, user));
+		binder.addValidators(new NewTopicInputValidator(topicService, user));
 	}
 }
