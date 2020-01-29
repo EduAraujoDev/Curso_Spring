@@ -2,6 +2,8 @@ package br.com.alura.forum.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -10,8 +12,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,8 +29,10 @@ import br.com.alura.forum.dto.output.TopicOutputDto;
 import br.com.alura.forum.exception.ResourceNotFoundException;
 import br.com.alura.forum.model.User;
 import br.com.alura.forum.model.topic.domain.Topic;
+import br.com.alura.forum.repository.TopicRepository;
 import br.com.alura.forum.service.DashboardService;
 import br.com.alura.forum.service.TopicService;
+import br.com.alura.forum.validation.NewTopicInputValidator;
 
 @RestController
 @RequestMapping(TopicController.BASE_URL)
@@ -35,10 +42,12 @@ public class TopicController {
 	
 	private DashboardService dashboardService;
 	private TopicService topicService;
+	private TopicRepository topicRepository;
 	
-	public TopicController(DashboardService dashboardService, TopicService topicService) {
+	public TopicController(DashboardService dashboardService, TopicService topicService, TopicRepository topicRepository) {
 		this.dashboardService = dashboardService;
 		this.topicService = topicService;
+		this.topicRepository = topicRepository;
 	}
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -64,8 +73,12 @@ public class TopicController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-	public TopicOutputDto CreateTopic(NewTopicInputDto newTopicDto, @AuthenticationPrincipal User user) {
+	public TopicOutputDto CreateTopic(@Valid @RequestBody NewTopicInputDto newTopicDto, @AuthenticationPrincipal User user) {
 		return topicService.createTopic(newTopicDto, user);
-		
+	}
+	
+	@InitBinder("newTopicInputDto")
+	public void initBinder(WebDataBinder binder, @AuthenticationPrincipal User user) {
+		binder.addValidators(new NewTopicInputValidator(this.topicRepository, user));
 	}
 }
