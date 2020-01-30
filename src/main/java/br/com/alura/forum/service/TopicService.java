@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import br.com.alura.forum.dto.input.NewTopicInputDto;
+import br.com.alura.forum.dto.output.TopicDashboardOutputDto;
 import br.com.alura.forum.dto.output.TopicOutputDto;
 import br.com.alura.forum.exception.ResourceNotFoundException;
 import br.com.alura.forum.model.Course;
@@ -26,6 +27,14 @@ public class TopicService {
 	public TopicService(TopicRepository topicRepository, CourseRepository courseRepository) {
 		this.topicRepository = topicRepository;
 		this.courseRepository = courseRepository;
+	}
+	
+	public TopicDashboardOutputDto findById(long id) {
+		return new TopicDashboardOutputDto(
+				topicRepository
+					.findById(id)
+					.orElseThrow(ResourceNotFoundException::new)
+				);
 	}
 	
 	public Page<Topic> findAll(Specification<Topic> topicSearchSpecification, Pageable pageable) {

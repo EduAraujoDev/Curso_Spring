@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +24,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.alura.forum.dto.input.NewTopicInputDto;
 import br.com.alura.forum.dto.input.TopicSearchInputDto;
-import br.com.alura.forum.dto.output.DesafioOutputDto;
+import br.com.alura.forum.dto.output.DashboardOutputDto;
 import br.com.alura.forum.dto.output.TopicBriefOutputDto;
+import br.com.alura.forum.dto.output.TopicDashboardOutputDto;
 import br.com.alura.forum.dto.output.TopicOutputDto;
 import br.com.alura.forum.exception.ResourceNotFoundException;
 import br.com.alura.forum.model.User;
 import br.com.alura.forum.model.topic.domain.Topic;
-import br.com.alura.forum.repository.TopicRepository;
 import br.com.alura.forum.service.DashboardService;
 import br.com.alura.forum.service.TopicService;
 import br.com.alura.forum.validation.NewTopicInputValidator;
@@ -64,14 +65,20 @@ public class TopicController {
 	
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(value = "/dashboard", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<DesafioOutputDto> list() {
+	public List<DashboardOutputDto> list() {
 		return dashboardService.findAllDesafio();
+	}
+	
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public TopicDashboardOutputDto searchTopic(@PathVariable long id) {
+		return topicService.findById(id);
 	}
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-	public TopicOutputDto CreateTopic(@Valid @RequestBody NewTopicInputDto newTopicDto, @AuthenticationPrincipal User user) {
+	public TopicOutputDto createTopic(@Valid @RequestBody NewTopicInputDto newTopicDto, @AuthenticationPrincipal User user) {
 		return topicService.createTopic(newTopicDto, user);
 	}
 	

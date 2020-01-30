@@ -11,7 +11,6 @@ import br.com.alura.forum.dto.input.NewTopicInputDto;
 import br.com.alura.forum.model.PossibleSpam;
 import br.com.alura.forum.model.User;
 import br.com.alura.forum.model.topic.domain.Topic;
-import br.com.alura.forum.repository.TopicRepository;
 import br.com.alura.forum.service.TopicService;
 
 public class NewTopicInputValidator implements Validator {

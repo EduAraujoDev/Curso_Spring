@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import br.com.alura.forum.model.Category;
 
-public class DesafioOutputDto {
+public class DashboardOutputDto {
 	
 	private String categoryName;
 	private List<String> subcategories;
@@ -13,15 +13,15 @@ public class DesafioOutputDto {
 	private int lastWeekTopics;
 	private int unansweredTopics;
 	
-	public DesafioOutputDto() {
+	public DashboardOutputDto() {
 		
 	}
 
-	public DesafioOutputDto(Category category) {
+	public DashboardOutputDto(Category category) {
 		this.categoryName = category.getName();
 	}
 
-	public DesafioOutputDto(Category category, int allTopics, int lastWeekTopics,
+	public DashboardOutputDto(Category category, int allTopics, int lastWeekTopics,
 			int unansweredTopics) {
 		super();
 		this.categoryName = category.getName();
@@ -71,9 +71,9 @@ public class DesafioOutputDto {
 		this.unansweredTopics = unansweredTopcis;
 	}
 
-	public static List<DesafioOutputDto> listFromCategories(List<Category> categories) {
+	public static List<DashboardOutputDto> listFromCategories(List<Category> categories) {
 		return categories.stream()
-				.map(DesafioOutputDto::new)
+				.map(DashboardOutputDto::new)
 				.collect(Collectors.toList());
 	}
 }

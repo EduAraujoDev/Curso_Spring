@@ -2,6 +2,7 @@ package br.com.alura.forum.repository;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -20,6 +21,8 @@ public interface TopicRepository extends Repository<Topic, Long>, JpaSpecificati
 	List<Topic> findAll();
 	
 	Topic save(Topic topic);
+	
+	Optional<Topic> findById(long id);
 	
 	@Query("SELECT count(topic) FROM Topic topic "
 			+ "JOIN topic.course course "

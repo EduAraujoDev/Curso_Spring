@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import br.com.alura.forum.dto.output.DesafioOutputDto;
+import br.com.alura.forum.dto.output.DashboardOutputDto;
 import br.com.alura.forum.model.Category;
 import br.com.alura.forum.repository.CategoryRepository;
 import br.com.alura.forum.repository.TopicRepository;
@@ -26,7 +26,7 @@ public class DashboardService {
 		this.categoryRepository = categoryRepository;
 	}
 	
-	public List<DesafioOutputDto> findAllDesafio() {
+	public List<DashboardOutputDto> findAllDesafio() {
 		List<Category> categories = categoryRepository.findAll();
 		
 		/* List<DesafioOutputDto> desafioOutputDtos = new ArrayList<>();
@@ -46,7 +46,7 @@ public class DashboardService {
 		return categories
 				.stream()
 				.filter(c -> c.getSubcategoryNames() != null && c.getSubcategoryNames().size() > 0)
-				.map(c -> new DesafioOutputDto(
+				.map(c -> new DashboardOutputDto(
 						c,
 						topicRepository.countTopicsByCategory(c), 
 						topicRepository.countLastWeekTopicsByCategory(c, Instant.now().minus(DIAS_UMA_SEMANA, ChronoUnit.DAYS)), 
